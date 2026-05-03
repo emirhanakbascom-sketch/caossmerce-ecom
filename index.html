@@ -25,6 +25,7 @@
             --secondary: #F8FAFC;     /* Crisp Off-White */
             --premium-gold: #C8A97E;  /* Champagne / Bronze Gold */
             --gold-hover: #B09267;
+            --whatsapp: #25D366;      /* Brand WhatsApp Green */
             
             --text-dark: #0F172A;
             --text-gray: #475569;
@@ -35,7 +36,7 @@
             /* Ultra-smooth premium shadows */
             --shadow-sm: 0 2px 10px rgba(11, 21, 40, 0.03);
             --shadow-md: 0 10px 30px rgba(11, 21, 40, 0.05);
-            --shadow-lg: 0 20px 40px rgba(11, 21, 40, 0.08);
+            --shadow-lg: 0 20px 40px rgba(11, 21, 40, 0.12);
             
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -48,12 +49,13 @@
         }
 
         body {
-            font-family: 'Manrope', sans-serif; /* Applied Manrope */
+            font-family: 'Manrope', sans-serif;
             color: var(--text-dark);
             background-color: var(--white);
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
 
         a {
@@ -106,14 +108,14 @@
             font-weight: 400;
         }
 
-        /* --- PREMIUM BUTTONS --- */
+        /* --- BUTTONS --- */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             padding: 16px 32px;
-            font-weight: 700;
-            border-radius: 4px; /* Sharper corners for B2B feel */
+            font-weight: 800;
+            border-radius: 4px;
             transition: var(--transition);
             cursor: pointer;
             border: none;
@@ -124,7 +126,6 @@
         .btn-primary {
             background-color: var(--primary);
             color: var(--premium-gold);
-            border: 1px solid var(--primary);
         }
 
         .btn-primary:hover {
@@ -154,6 +155,31 @@
         .btn-outline:hover {
             background-color: var(--white);
             color: var(--primary);
+        }
+
+        /* --- FLOATING WHATSAPP BUTTON --- */
+        .whatsapp-float {
+            position: fixed;
+            width: 65px;
+            height: 65px;
+            bottom: 40px;
+            right: 40px;
+            background-color: var(--whatsapp);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .whatsapp-float:hover {
+            transform: translateY(-5px) scale(1.05);
+            background-color: #20BA56;
+            box-shadow: 0 20px 40px rgba(37, 211, 102, 0.4);
         }
 
         /* --- 1. TOP BAR --- */
@@ -190,7 +216,7 @@
             background-color: var(--white);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 999;
             box-shadow: var(--shadow-sm);
         }
 
@@ -201,7 +227,6 @@
             height: 90px;
         }
 
-        /* Refined Logo */
         .brand-logo {
             display: flex;
             align-items: center;
@@ -234,9 +259,6 @@
             bottom: 0; right: 0;
         }
 
-        footer .brand-logo { color: var(--white); }
-        footer .logo-box-1 { background-color: var(--white); }
-
         .nav-links {
             display: flex;
             gap: 36px;
@@ -254,16 +276,37 @@
             color: var(--premium-gold);
         }
 
+        /* Header Action Buttons (Contact & Book) */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .contact-link {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+
+        .contact-link:hover {
+            color: var(--premium-gold);
+            border-bottom-color: var(--premium-gold);
+        }
+
         /* --- 3. HERO SECTION --- */
         .hero {
             background-color: var(--primary);
             color: var(--white);
             padding: 140px 0;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Sophisticated dark gradient overlay */
         .hero::before {
             content: '';
             position: absolute;
@@ -317,61 +360,83 @@
             justify-content: center;
         }
 
-        /* --- 4. PLATFORMS --- */
-        .platforms-banner {
-            background-color: var(--white);
-            padding: 60px 0;
+        /* --- 4. SCROLLING MARQUEE (PLATFORM LOGOS) --- */
+        .marquee-wrapper {
+            background-color: var(--secondary);
+            padding: 40px 0;
             border-bottom: 1px solid var(--border);
-            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
         }
 
-        .platforms-banner p {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 40px;
+        /* Gradient fades on left and right for seamless look */
+        .marquee-wrapper::before,
+        .marquee-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            z-index: 2;
         }
 
-        .platform-logos {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 64px;
-            color: var(--text-light);
+        .marquee-wrapper::before {
+            left: 0;
+            background: linear-gradient(to right, var(--secondary) 0%, transparent 100%);
         }
 
-        .platform-logos .brand-item {
-            display: flex;
+        .marquee-wrapper::after {
+            right: 0;
+            background: linear-gradient(to left, var(--secondary) 0%, transparent 100%);
+        }
+
+        .marquee-track {
+            display: inline-block;
+            animation: scroll-marquee 30s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* Scrolls precisely half its length since content is duplicated */
+        }
+
+        .marquee-item {
+            display: inline-flex;
             align-items: center;
             gap: 12px;
+            margin: 0 40px;
+            color: var(--text-light);
             transition: var(--transition);
             filter: grayscale(100%);
             opacity: 0.6;
         }
 
-        .platform-logos .brand-item i { font-size: 2rem; }
-        .platform-logos .brand-item span {
-            font-size: 1.25rem;
-            font-weight: 700;
+        .marquee-item i { font-size: 2.25rem; }
+        .marquee-item span {
+            font-size: 1.35rem;
+            font-weight: 800;
             letter-spacing: -0.02em;
         }
 
-        .platform-logos .brand-item:hover {
+        .marquee-item:hover {
             filter: grayscale(0%);
             opacity: 1;
+            color: var(--primary);
         }
 
-        .platform-logos .amazon:hover { color: #FF9900; }
-        .platform-logos .etsy:hover { color: #F1641E; }
-        .platform-logos .shopify:hover { color: #95BF47; }
-        .platform-logos .ebay:hover { color: #E53238; }
+        .marquee-item.amazon:hover { color: #FF9900; }
+        .marquee-item.etsy:hover { color: #F1641E; }
+        .marquee-item.shopify:hover { color: #95BF47; }
+        .marquee-item.ebay:hover { color: #E53238; }
 
         /* --- 5. SERVICES GRID --- */
         .services-section {
-            background-color: var(--secondary);
+            background-color: var(--white);
         }
 
         .services-grid {
@@ -381,7 +446,7 @@
         }
 
         .service-card {
-            background: var(--white);
+            background: var(--secondary);
             border: 1px solid var(--border);
             padding: 48px 40px;
             transition: var(--transition);
@@ -389,7 +454,6 @@
             overflow: hidden;
         }
 
-        /* Premium line accent on hover */
         .service-card::after {
             content: '';
             position: absolute;
@@ -404,11 +468,10 @@
         .service-card:hover {
             box-shadow: var(--shadow-lg);
             transform: translateY(-8px);
+            background: var(--white);
         }
 
-        .service-card:hover::after {
-            transform: scaleX(1);
-        }
+        .service-card:hover::after { transform: scaleX(1); }
 
         .service-icon {
             font-size: 2.25rem;
@@ -429,9 +492,9 @@
             font-size: 1rem;
         }
 
-        /* --- 6. GLOBAL MARKETS --- */
+        /* --- 6. GLOBAL MARKETS (FLAGS) --- */
         .markets-section {
-            background-color: var(--white);
+            background-color: var(--secondary);
         }
 
         .market-grid {
@@ -470,7 +533,6 @@
             color: var(--primary);
             font-weight: 800;
             margin-bottom: 4px;
-            letter-spacing: -0.02em;
         }
 
         .market-info span {
@@ -494,8 +556,6 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 32px;
             text-align: center;
-            position: relative;
-            z-index: 2;
         }
 
         .stat-item h4 {
@@ -515,69 +575,9 @@
             letter-spacing: 0.1em;
         }
 
-        /* --- 8. REVIEWS --- */
-        .testimonials {
-            background-color: var(--secondary);
-        }
-
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-        }
-
-        .review-card {
-            background: var(--white);
-            padding: 48px;
-            box-shadow: var(--shadow-md);
-            border-top: 4px solid var(--premium-gold);
-            position: relative;
-        }
-
-        .quote-icon {
-            font-size: 2rem;
-            color: var(--premium-gold);
-            margin-bottom: 24px;
-            display: block;
-        }
-
-        .stars {
-            color: var(--premium-gold);
-            font-size: 1rem;
-            margin-bottom: 24px;
-        }
-
-        .review-text {
-            font-size: 1.1rem;
-            color: var(--primary);
-            font-style: italic;
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-
-        .client-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border-top: 1px solid var(--border);
-            padding-top: 24px;
-        }
-
-        .client-details h4 {
-            font-size: 1rem;
-            color: var(--primary);
-            font-weight: 800;
-        }
-
-        .client-details p {
-            font-size: 0.85rem;
-            color: var(--text-gray);
-            font-weight: 600;
-        }
-
-        /* --- 9. CTA --- */
+        /* --- 8. CTA BANNER --- */
         .cta-banner {
-            background-color: var(--white);
+            background-color: var(--secondary);
             text-align: center;
         }
 
@@ -606,7 +606,7 @@
             margin-right: auto;
         }
 
-        /* --- 10. FOOTER --- */
+        /* --- 9. FOOTER --- */
         footer {
             background-color: var(--primary);
             color: var(--text-light);
@@ -620,33 +620,14 @@
             margin-bottom: 80px;
         }
 
+        footer .brand-logo { color: var(--white); }
+        footer .logo-box-1 { background-color: var(--white); }
+
         .footer-brand p {
             font-size: 0.95rem;
             margin-top: 24px;
             margin-bottom: 32px;
             max-width: 300px;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 16px;
-        }
-
-        .social-icons a {
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            transition: var(--transition);
-        }
-
-        .social-icons a:hover {
-            background: var(--premium-gold);
-            border-color: var(--premium-gold);
-            color: var(--primary);
         }
 
         .footer-links h4, .footer-addresses h4 {
@@ -661,10 +642,6 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
-        }
-
-        .footer-links a {
-            font-weight: 500;
         }
 
         .footer-links a:hover {
@@ -701,7 +678,7 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
-            .services-grid, .market-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+            .services-grid, .market-grid { grid-template-columns: repeat(2, 1fr); }
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 60px; }
             .footer-grid { grid-template-columns: 1fr 1fr; }
             .footer-addresses { grid-column: span 2; display: flex; gap: 40px; }
@@ -710,19 +687,23 @@
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.75rem; }
-            .nav-links { display: none; }
-            .services-grid, .market-grid, .testimonial-grid { grid-template-columns: 1fr; }
+            .nav-links, .contact-link { display: none; } /* Hide menu on mobile */
+            .services-grid, .market-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; }
             .footer-addresses { grid-column: span 1; flex-direction: column; gap: 0;}
             .top-bar-content { justify-content: center; text-align: center; }
             .top-contact { flex-direction: column; gap: 8px; }
             .hero-btns { flex-direction: column; }
-            .platform-logos { gap: 32px; }
-            .cta-box h2 { font-size: 2.25rem; }
+            .whatsapp-float { width: 55px; height: 55px; font-size: 28px; bottom: 20px; right: 20px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/1234567890" class="whatsapp-float" target="_blank" title="Chat with us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <!-- 1. TOP BAR -->
     <div class="top-bar">
@@ -737,7 +718,7 @@
         </div>
     </div>
 
-    <!-- 2. HEADER & CUSTOM LOGO -->
+    <!-- 2. HEADER & LOGO -->
     <header>
         <div class="container nav-container">
             <a href="#" class="brand-logo">
@@ -755,8 +736,10 @@
                 <a href="#">Insights</a>
             </nav>
 
-            <div class="nav-links">
-                <a href="#" class="btn btn-primary">Book Consultation</a>
+            <div class="header-actions">
+                <a href="#" class="contact-link"><i class="fas fa-headset"></i> Contact Us</a>
+                <!-- Prominent Header Button -->
+                <a href="#" class="btn btn-gold">Book Consultation</a>
             </div>
         </div>
     </header>
@@ -774,27 +757,26 @@
         </div>
     </section>
 
-    <!-- 4. PLATFORMS & MARKETPLACES -->
-    <div class="platforms-banner">
-        <div class="container">
-            <p>Scaling brands across elite global ecosystems</p>
-            <div class="platform-logos">
-                <div class="brand-item amazon">
-                    <i class="fab fa-amazon"></i> <span>Amazon</span>
-                </div>
-                <div class="brand-item etsy">
-                    <i class="fab fa-etsy"></i> <span>Etsy</span>
-                </div>
-                <div class="brand-item shopify">
-                    <i class="fab fa-shopify"></i> <span>Shopify</span>
-                </div>
-                <div class="brand-item ebay">
-                    <i class="fab fa-ebay"></i> <span>eBay</span>
-                </div>
-                <div class="brand-item">
-                    <i class="fab fa-stripe"></i> <span>Stripe</span>
-                </div>
-            </div>
+    <!-- 4. INFINITE SCROLLING MARQUEE (PLATFORMS) -->
+    <div class="marquee-wrapper">
+        <div class="marquee-track">
+            <!-- First Set of Logos -->
+            <div class="marquee-item amazon"><i class="fab fa-amazon"></i> <span>Amazon</span></div>
+            <div class="marquee-item etsy"><i class="fab fa-etsy"></i> <span>Etsy</span></div>
+            <div class="marquee-item shopify"><i class="fab fa-shopify"></i> <span>Shopify</span></div>
+            <div class="marquee-item ebay"><i class="fab fa-ebay"></i> <span>eBay</span></div>
+            <div class="marquee-item"><i class="fab fa-stripe"></i> <span>Stripe</span></div>
+            <div class="marquee-item"><i class="fas fa-shopping-cart"></i> <span>WooCommerce</span></div>
+            <div class="marquee-item"><i class="fas fa-store"></i> <span>Walmart</span></div>
+            
+            <!-- Duplicated Set of Logos for Seamless Infinite Scroll -->
+            <div class="marquee-item amazon"><i class="fab fa-amazon"></i> <span>Amazon</span></div>
+            <div class="marquee-item etsy"><i class="fab fa-etsy"></i> <span>Etsy</span></div>
+            <div class="marquee-item shopify"><i class="fab fa-shopify"></i> <span>Shopify</span></div>
+            <div class="marquee-item ebay"><i class="fab fa-ebay"></i> <span>eBay</span></div>
+            <div class="marquee-item"><i class="fab fa-stripe"></i> <span>Stripe</span></div>
+            <div class="marquee-item"><i class="fas fa-shopping-cart"></i> <span>WooCommerce</span></div>
+            <div class="marquee-item"><i class="fas fa-store"></i> <span>Walmart</span></div>
         </div>
     </div>
 
@@ -932,62 +914,7 @@
         </div>
     </section>
 
-    <!-- 8. CUSTOMER REVIEWS (TESTIMONIALS) -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Clientele</span>
-                <h2>Client Success Stories</h2>
-                <p>Discover how we've partnered with leading brands to architect and execute their global growth strategies.</p>
-            </div>
-
-            <div class="testimonial-grid">
-                <div class="review-card">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"Crossmerce completely revolutionized our Amazon infrastructure. Within 6 months, our US and EU market sales grew by 300%. Their operational excellence is unmatched."</p>
-                    <div class="client-info">
-                        <div class="client-details">
-                            <h4>Sarah Mitchell</h4>
-                            <p>CEO, Lumina Home</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="review-card">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"We struggled with visibility on Etsy and Shopify. The Crossmerce team optimized our digital footprint and established a highly profitable supply chain. Incredible ROI."</p>
-                    <div class="client-info">
-                        <div class="client-details">
-                            <h4>David Torres</h4>
-                            <p>Founder, Artisan Woodcraft</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="review-card">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                    <p class="review-text">"The strategic legal and compliance guidance we received for expanding into the German market was invaluable. They circumvented months of bureaucratic hurdles."</p>
-                    <div class="client-info">
-                        <div class="client-details">
-                            <h4>Elena Rostova</h4>
-                            <p>Operations Director, VeloTech</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 9. CTA BANNER -->
+    <!-- 8. CTA BANNER -->
     <section class="cta-banner">
         <div class="container">
             <div class="cta-box">
@@ -998,12 +925,12 @@
         </div>
     </section>
 
-    <!-- 10. FOOTER -->
+    <!-- 9. FOOTER -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 
-                <div class="footer-brand">
+                <div>
                     <a href="#" class="brand-logo">
                         <div class="logo-mark">
                             <div class="logo-box-1"></div>
@@ -1011,12 +938,7 @@
                         </div>
                         Crossmerce.
                     </a>
-                    <p>We are a boutique e-commerce consulting firm dedicated to building, scaling, and optimizing digital commerce operations for premium brands worldwide.</p>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
+                    <p class="footer-brand p">We are a boutique e-commerce consulting firm dedicated to building, scaling, and optimizing digital commerce operations for premium brands worldwide.</p>
                 </div>
 
                 <div class="footer-links">
